@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MIS Networking Services</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Load dark mode early -->
+  <script>
+    (function () {
+      if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    })();
+  </script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <h2>MIS Networking</h2>
+  <div>
+    <a href="login.html" class="btn-outline">Login</a>
+    <a href="register.html" class="btn-primary">Register</a>
+    <button onclick="toggleDark()" class="btn-outline">🌙</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Professional IT & Networking Services</h1>
+    <p>
+      Reliable networking, infrastructure, and IT solutions across Oman.
+    </p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section">
+  <h2>Service Categories</h2>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Network Installation</h3>
+      <p>LAN/WAN setup, routers, switches, cabling and configuration.</p>
+      <p><strong>OMR 25.000</strong></p>
+      <button onclick="requestService('Network Installation')">
+        Request Service
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>Network Troubleshooting</h3>
+      <p>Fix connectivity issues, IP conflicts, slow network problems.</p>
+      <p><strong>OMR 15.000</strong></p>
+      <button onclick="requestService('Network Troubleshooting')">
+        Request Service
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>Security & Firewalls</h3>
+      <p>Firewall configuration, VPN setup, network hardening.</p>
+      <p><strong>OMR 30.000</strong></p>
+      <button onclick="requestService('Security & Firewalls')">
+        Request Service
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>Server & Cloud Setup</h3>
+      <p>On-prem servers, backups, virtualization and cloud migration.</p>
+      <p><strong>OMR 40.000</strong></p>
+      <button onclick="requestService('Server & Cloud Setup')">
+        Request Service
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2026 MIS Networking Services</p>
+</footer>
+
+<!-- SCRIPT -->
+<script>
+
+function toggleDark() {
+  document.documentElement.classList.toggle("dark");
+  localStorage.setItem(
+    "theme",
+    document.documentElement.classList.contains("dark") ? "dark" : "light"
+  );
+}
+
+function requestService(serviceName) {
+
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+
+  // 🚨 NOT LOGGED IN
+  if (!user) {
+    alert("Please login first to request a service.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // 🚨 NOT A CLIENT
+  if (user.role !== "client") {
+    alert("Only clients can request services.");
+    return;
+  }
+
+  // ✅ Save selected service
+  localStorage.setItem("selectedService", serviceName);
+
+  // ✅ Redirect to client dashboard
+  window.location.href = "client/dashboard.html";
+}
+
+</script>
+
+</body>
+</html>

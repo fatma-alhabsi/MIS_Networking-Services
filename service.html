@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Service Details</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
+      background: #2c3e50;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      transition: 0.2s;
+    }
+
+    .navbar a:hover {
+      background: #34495e;
+    }
+
+    .section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 25px 30px;
+      margin-bottom: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    h4 {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #2c3e50;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    ul.features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    ul.features li {
+      background: #ecf0f1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+    }
+
+    ul.features li::before {
+      content: "✔";
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #27ae60;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 20px;
+      transition: 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #2ecc71;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <h2>MIS Networking</h2>
+  <a href="index.html">← Back</a>
+</div>
+
+<section class="section">
+  <div class="header" id="serviceTitle">Service Title</div>
+
+  <div class="card">
+    <p id="serviceDescription" style="font-size: 18px; line-height: 1.6;"></p>
+
+    <h4>Key Features</h4>
+    <ul id="features" class="features"></ul>
+
+    <h4>Pricing</h4>
+    <p id="price" style="font-weight: bold; font-size: 18px;"></p>
+
+   <a id="requestBtn" class="btn-primary">Request This Service</a>
+
+  </div>
+</section>
+
+<script src="js/service.js"></script>
+</body>
+</html>

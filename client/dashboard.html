@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Client Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+  <div class="sidebar">
+    <h2>Client Panel</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="../login.html">Logout</a>
+  </div>
+
+  <div class="main">
+    <div class="header">Client Dashboard</div>
+    <p id="welcome"></p>
+
+    <!-- REQUEST -->
+    <div class="card">
+      <h3>Request a Service</h3>
+
+      <div id="serviceBox"></div>
+
+      <label>Description</label>
+      <textarea id="description" placeholder="Describe the issue..."></textarea>
+
+      <button onclick="createRequest()">Submit Request</button>
+    </div>
+
+    <!-- JOBS -->
+    <div class="card">
+      <h3>My Requests</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Status</th>
+            <th>Technician Notes</th>
+          </tr>
+        </thead>
+        <tbody id="myRequests"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="client.js"></script>
+</body>
+</html>

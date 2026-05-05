@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Request Service</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #2c3e50;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: 0.2s;
+    }
+
+    .navbar a:hover {
+      background: #34495e;
+    }
+
+    .section {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #2c3e50;
+    }
+
+    .card {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 100px;
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      margin-top: 25px;
+      padding: 14px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+    }
+
+    .btn-primary:hover {
+      background: #2ecc71;
+    }
+
+    @media (max-width: 640px) {
+      .section {
+        margin: 20px;
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <h2>MIS Networking</h2>
+  <a href="index.html">Home</a>
+</div>
+
+<section class="section">
+  <h2>Request a Service</h2>
+
+  <div class="card">
+    <form id="requestForm">
+      <label>Selected Service</label>
+      <input type="text" id="service" readonly>
+
+      <label>Problem Description</label>
+      <textarea id="description" placeholder="Describe your issue..." required></textarea>
+
+      <label>Preferred Date</label>
+      <input type="date" id="date" required>
+
+      <button type="submit" class="btn-primary">Submit Request</button>
+    </form>
+  </div>
+</section>
+
+<script src="js/request.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Reports</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/theme.js"></script>
+
+</head>
+<body>
+
+<div class="wrapper">
+
+  <div class="sidebar">
+    <h2>MIS Admin</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html" class="active">Reports</a>
+    <a href="billing.html">Billing</a>
+    <a href="../login.html">Logout</a>
+  </div>
+
+  <div class="main">
+    <div class="header">Reports</div>
+    <p id="welcome"></p>
+
+    <div class="card">
+      <h3>Generate Reports</h3>
+
+      <label for="statusFilter">Filter by Status:</label>
+      <select id="statusFilter">
+        <option value="">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Assigned">Assigned</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved Remotely">Resolved Remotely</option>
+        <option value="Completed">Completed</option>
+      </select>
+
+      <label for="techFilter">Filter by Technician:</label>
+      <select id="techFilter">
+        <option value="">All</option>
+      </select>
+
+      <button onclick="exportCSV()">Export CSV</button>
+    </div>
+
+    <div class="card">
+      <h3>Job List</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Client</th>
+            <th>Technician</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th>Technician Notes</th>
+          </tr>
+        </thead>
+        <tbody id="reportTable"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("currentUser"));
+if (!user || user.role !== "admin") window.location.href = "../login.html";
+document.getElementById("welcome").innerText = `Welcome, Admin: ${user.email}`;
+
+// Load all technicians for filter
+const users = JSON.parse(localStorage.getItem("users")) || [];
+const technicians = users.filter(u=>u.role==="technician");
+const techFilter = document.getElementById("techFilter");
+technicians.forEach(t=>{
+  const opt=document.createElement("option");
+  opt.value=t.email;
+  opt.innerText=t.email;
+  techFilter.appendChild(opt);
+});
+
+function loadReports() {
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const tbody = document.getElementById("reportTable");
+  const statusVal = document.getElementById("statusFilter").value;
+  const techVal = document.getElementById("techFilter").value;
+
+  tbody.innerHTML = "";
+
+  const filtered = jobs.filter(j=>{
+    return (!statusVal || j.status===statusVal) && (!techVal || j.technician===techVal);
+  });
+
+  if(filtered.length===0){
+    tbody.innerHTML = `<tr><td colspan="6">No jobs found</td></tr>`;
+    return;
+  }
+
+  filtered.forEach(job=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${job.title}</td>
+      <td>${job.client}</td>
+      <td>${job.technician||"-"}</td>
+      <td>${job.status}</td>
+      <td>${job.deadline||"-"}</td>
+      <td>${job.technicianNotes||""}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+document.getElementById("statusFilter").onchange = loadReports;
+document.getElementById("techFilter").onchange = loadReports;
+
+function exportCSV() {
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const filtered = jobs.filter(j=>{
+    const s=document.getElementById("statusFilter").value;
+    const t=document.getElementById("techFilter").value;
+    return (!s || j.status===s) && (!t || j.technician===t);
+  });
+
+  let csv="Service,Client,Technician,Status,Deadline,Technician Notes\n";
+  filtered.forEach(j=>{
+    csv+=`"${j.title}","${j.client}","${j.technician||""}","${j.status}","${j.deadline||""}","${j.technicianNotes||""}"\n`;
+  });
+
+  const blob = new Blob([csv], {type:"text/csv"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url;
+  a.download="MIS_Reports.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Initial load
+loadReports();
+setInterval(loadReports,3000);
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Client Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<h2>Client Dashboard</h2>
+
+<button onclick="logout()">Logout</button>
+
+<hr>
+
+<h3>Request a Service</h3>
+
+<select id="service">
+  <option value="Network Installation">Network Installation</option>
+  <option value="Server Setup">Server Setup</option>
+  <option value="Firewall Configuration">Firewall Configuration</option>
+  <option value="IT Support">IT Support</option>
+</select>
+
+<button onclick="requestService()">Submit Request</button>
+
+<hr>
+
+<h3>My Jobs</h3>
+<div id="jobs">Loading...</div>
+
+<!-- IMPORTANT: SCRIPT ORDER -->
+<script src="../data.js"></script>
+<script src="../client.js"></script>
+
+</body>
+</html>

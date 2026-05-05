@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>MIS Admin</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html">Reports</a>
+    <a href="billing.html">Billing</a>
+    <a href="../login.html">Logout</a>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="header">Admin Dashboard</div>
+    <p id="welcome"></p>
+
+    <div class="card">
+      <h3>Client Service Requests</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Client</th>
+            <th>Technician</th>
+            <th>Deadline (SLA)</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="requests"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =======================
+   AUTH CHECK
+======================= */
+const user = JSON.parse(localStorage.getItem("currentUser"));
+if (!user || user.role !== "admin") {
+  window.location.href = "../login.html";
+}
+
+document.getElementById("welcome").innerText =
+  `Welcome, Admin: ${user.email}`;
+
+/* =======================
+   LOAD DATA
+======================= */
+const users = JSON.parse(localStorage.getItem("users")) || [];
+
+function loadRequests() {
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const tbody = document.getElementById("requests");
+  tbody.innerHTML = "";
+
+  if (jobs.length === 0) {
+    tbody.innerHTML =
+      `<tr><td colspan="6">No service requests found</td></tr>`;
+    return;
+  }
+
+  jobs.forEach(job => {
+    const technicians = users.filter(u => u.role === "technician");
+
+    const techOptions = technicians.map(t => `
+      <option value="${t.email}" ${
+        job.technician === t.email ? "selected" : ""
+      }>
+        ${t.email}
+      </option>
+    `).join("");
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${job.title}</td>
+      <td>${job.client}</td>
+
+      <td>
+        <select id="tech-${job.id}">
+          <option value="">-- Select Technician --</option>
+          ${techOptions}
+        </select>
+      </td>
+
+      <td>
+        <input type="date" id="deadline-${job.id}" value="${job.deadline || ""}">
+      </td>
+
+      <td>${job.status}</td>
+
+      <td>
+        <button onclick="assignTechnician(${job.id})">
+          Assign
+        </button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+/* =======================
+   ASSIGN TECHNICIAN
+======================= */
+function assignTechnician(jobId) {
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const job = jobs.find(j => j.id === jobId);
+
+  const tech = document.getElementById(`tech-${jobId}`).value;
+  const deadline = document.getElementById(`deadline-${jobId}`).value;
+
+  if (!tech || !deadline) {
+    alert("Please select a technician and a deadline");
+    return;
+  }
+
+  job.technician = tech;
+  job.deadline = deadline;
+  job.status = "Assigned";
+
+  localStorage.setItem("jobs", JSON.stringify(jobs));
+  alert("Technician assigned successfully");
+
+  loadRequests(); // refresh UI from saved data
+}
+
+/* =======================
+   INIT
+======================= */
+loadRequests();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MIS Helpdesk Login</title>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/theme.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+}
+
+/* CARD */
+
+.card{
+background:white;
+width:380px;
+padding:40px;
+border-radius:14px;
+box-shadow:0 20px 50px rgba(0,0,0,0.3);
+text-align:center;
+animation:fade 0.6s ease;
+}
+
+@keyframes fade{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+/* LOGO */
+
+.logo{
+font-size:26px;
+font-weight:bold;
+color:#2a5298;
+margin-bottom:10px;
+}
+
+.subtitle{
+font-size:14px;
+color:#666;
+margin-bottom:25px;
+}
+
+/* INPUT */
+
+.input-box{
+position:relative;
+margin-bottom:18px;
+}
+
+.input-box input{
+width:100%;
+padding:13px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+transition:0.3s;
+}
+
+.input-box input:focus{
+border-color:#2a5298;
+outline:none;
+box-shadow:0 0 5px rgba(42,82,152,0.4);
+}
+
+/* PASSWORD ICON */
+
+.toggle-password{
+position:absolute;
+right:12px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+font-size:18px;
+}
+
+/* BUTTON */
+
+button{
+width:100%;
+padding:13px;
+background:#2a5298;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#1e3c72;
+}
+
+/* LINKS */
+
+.link{
+margin-top:18px;
+font-size:14px;
+}
+
+.link a{
+color:#2a5298;
+font-weight:bold;
+text-decoration:none;
+}
+
+/* DARK MODE */
+
+body.dark{
+background:#121212;
+}
+
+body.dark .card{
+background:#1e1e1e;
+color:white;
+}
+
+body.dark input{
+background:#2a2a2a;
+border:1px solid #444;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="logo">MIS Helpdesk</div>
+<div class="subtitle">Login to manage your IT services</div>
+
+<div class="input-box">
+<input type="email" id="email" placeholder="Email" required>
+</div>
+
+<div class="input-box">
+<input type="password" id="password" placeholder="Password" required>
+<span class="toggle-password" onclick="togglePassword()">👁</span>
+</div>
+
+<button onclick="login()">Login</button>
+
+<div class="link">
+Forgot password? <a href="forgot-password.html">Reset it here</a>
+</div>
+
+<div class="link">
+No account? <a href="register.html">Register</a>
+</div>
+
+</div>
+
+<script>
+
+function togglePassword(){
+const pass=document.getElementById("password");
+
+if(pass.type==="password"){
+pass.type="text";
+}else{
+pass.type="password";
+}
+}
+
+if(localStorage.getItem("theme")==="dark"){
+document.body.classList.add("dark");
+}
+
+</script>
+
+</body>
+</html>

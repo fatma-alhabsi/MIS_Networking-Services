@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Technician Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Technician</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="../login.html">Logout</a>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="header">Technician Dashboard</div>
+    <p id="welcome"></p>
+
+    <div class="card">
+      <h3>My Assigned Jobs</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Client</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Technician Notes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="jobsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =======================
+   AUTH CHECK
+======================= */
+const user = JSON.parse(localStorage.getItem("currentUser"));
+if (!user || user.role !== "technician") {
+  window.location.href = "../login.html";
+}
+
+document.getElementById("welcome").innerText =
+  `Welcome, Technician: ${user.email}`;
+
+/* =======================
+   LOAD JOBS
+======================= */
+function loadJobs() {
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const myJobs = jobs.filter(j => j.technician === user.email);
+
+  const tbody = document.getElementById("jobsTable");
+  tbody.innerHTML = "";
+
+  if (myJobs.length === 0) {
+    tbody.innerHTML =
+      `<tr><td colspan="6">No assigned jobs</td></tr>`;
+    return;
+  }
+
+  myJobs.forEach(job => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${job.title}</td>
+      <td>${job.client}</td>
+      <td>${job.deadline || "-"}</td>
+
+      <td>
+        <select id="status-${job.id}">
+          ${renderStatusOptions(job.status)}
+        </select>
+      </td>
+
+      <td>
+        <textarea
+          id="notes-${job.id}"
+          placeholder="Enter technical notes..."
+          style="width:100%; min-height:60px;"
+        >${job.notes || ""}</textarea>
+      </td>
+
+      <td>
+        <button onclick="saveJob(${job.id})">Save</button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+/* =======================
+   STATUS OPTIONS
+======================= */
+function renderStatusOptions(current) {
+  const statuses = [
+    "Assigned",
+    "In Progress",
+    "Waiting for Client",
+    "Resolved Remotely",
+    "Completed",
+    "Escalated"
+  ];
+
+  return statuses.map(s =>
+    `<option value="${s}" ${s === current ? "selected" : ""}>
+      ${s}
+    </option>`
+  ).join("");
+}
+
+/* =======================
+   SAVE JOB UPDATE
+======================= */
+function saveJob(jobId) {
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const job = jobs.find(j => j.id === jobId);
+
+  if (!job) return;
+
+  job.status =
+    document.getElementById(`status-${jobId}`).value;
+
+  job.notes =
+    document.getElementById(`notes-${jobId}`).value;
+
+  localStorage.setItem("jobs", JSON.stringify(jobs));
+
+  alert("Job updated successfully");
+  loadJobs(); // reload from saved state
+}
+
+/* =======================
+   INIT
+======================= */
+loadJobs();
+</script>
+
+</body>
+</html>

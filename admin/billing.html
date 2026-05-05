@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Billing</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/theme.js"></script>
+
+</head>
+<body>
+
+<div class="wrapper">
+
+  <div class="sidebar">
+    <h2>MIS Admin</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html">Reports</a>
+    <a href="billing.html" class="active">Billing</a>
+    <a href="../login.html">Logout</a>
+  </div>
+
+  <div class="main">
+    <div class="header">Billing</div>
+    <p id="welcome"></p>
+
+    <div class="card">
+      <h3>Completed Jobs</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Client</th>
+            <th>Technician</th>
+            <th>Amount (OMR)</th>
+            <th>Invoice</th>
+          </tr>
+        </thead>
+        <tbody id="billingTable"></tbody>
+      </table>
+      <h4>Total Revenue: <span id="totalRevenue">0</span> OMR</h4>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("currentUser"));
+if (!user || user.role !== "admin") window.location.href="../login.html";
+document.getElementById("welcome").innerText = `Welcome, Admin: ${user.email}`;
+
+const JOB_PAYMENT=100;
+
+function loadBilling(){
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const completed = jobs.filter(j=>j.status==="Completed");
+  const tbody = document.getElementById("billingTable");
+  tbody.innerHTML="";
+  let total=0;
+
+  if(completed.length===0){
+    tbody.innerHTML=`<tr><td colspan="5">No completed jobs</td></tr>`;
+    document.getElementById("totalRevenue").innerText=0;
+    return;
+  }
+
+  completed.forEach(job=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${job.title}</td>
+      <td>${job.client}</td>
+      <td>${job.technician||"-"}</td>
+      <td>${JOB_PAYMENT}</td>
+      <td><button onclick="generateInvoice(${job.id})">Generate Invoice</button></td>
+    `;
+    tbody.appendChild(tr);
+    total+=JOB_PAYMENT;
+  });
+
+  document.getElementById("totalRevenue").innerText=total;
+}
+
+function generateInvoice(id){
+  const jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const job = jobs.find(j=>j.id===id);
+  if(!job) return;
+  const invoice=`
+    Service: ${job.title}\n
+    Client: ${job.client}\n
+    Technician: ${job.technician||"-"}\n
+    Amount: ${JOB_PAYMENT} OMR
+  `;
+  alert("Invoice Generated:\n\n"+invoice);
+}
+
+loadBilling();
+setInterval(loadBilling,3000);
+</script>
+
+
+</body>
+</html>
